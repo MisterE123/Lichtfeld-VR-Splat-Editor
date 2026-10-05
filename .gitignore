@@ -1,0 +1,16 @@
+# Local investigation, test runs, and scene recovery data.
+/work/
+/outputs/*.licht
+
+# Python environments and generated files.
+__pycache__/
+*.py[cod]
+.venv/
+.deps_installed
+
+# Local preferences and editor files.
+settings.json
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
