@@ -37,11 +37,12 @@ def write_ply(data, path):
         for i in range(sh.shape[1]):
             cols[f"f_rest_{i}"] = sh[:, i]
     cols["opacity"] = array(data.opacity_raw).reshape(n)
-    records = np.empty(n, dtype=[(k, "<f4") for k in cols])
+    cols["lfs_index"] = np.arange(n, dtype=np.uint32)
+    records = np.empty(n, dtype=[(k, "<u4" if k == "lfs_index" else "<f4") for k in cols])
     for k, v in cols.items():
         records[k] = v
     header = "ply\nformat binary_little_endian 1.0\n" + f"element vertex {n}\n"
-    header += "".join(f"property float {k}\n" for k in cols) + "end_header\n"
+    header += "".join(f"property {'uint' if k == 'lfs_index' else 'float'} {k}\n" for k in cols) + "end_header\n"
     with open(path, "wb") as f:
         f.write(header.encode("ascii"))
         f.write(records.tobytes())

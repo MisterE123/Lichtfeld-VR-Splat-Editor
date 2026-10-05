@@ -104217,7 +104217,8 @@ const loadGsplat = async (app, config, progressCallback) => {
     const { contents, contentUrl, unified, aa } = config;
     const c = contents;
     const filename = new URL(contentUrl, location.href).pathname.split('/').pop();
-    const data = filename.toLowerCase() === 'meta.json' ? await (await contents).json() : undefined;
+    // Editing requires stable native row IDs; never silently reorder a PLY.
+    const data = filename.toLowerCase() === 'meta.json' ? await (await contents).json() : { reorder: false };
     const asset = new Asset(filename, 'gsplat', { url: contentUrl, filename, contents: c }, data);
     return new Promise((resolve, reject) => {
         asset.on('load', () => {

@@ -2,6 +2,17 @@
 
 Verified against the installed Lichtfeld Nightly v0.5.3-759-gf66c82a3 on October 5, 2026.
 
+## 0.1.1 deletion correction
+
+- Reproduced the root cause using the bundled engine's actual `calcMortonOrder` and `reorderData`: render row zero referred to native row one. Prior count-only tests did not catch this mismatch.
+- Regression checks cover explicit native IDs through property reordering, inverse deletion-state mapping, duplicate/invalid IDs, and stable sorting of duplicate positions. Exports contain an unsigned 32-bit `lfs_index` property; the loader disables reordering and the editor still translates IDs explicitly.
+- Separate eight-splat native fixture with deliberately shuffled positions verifies exported IDs and positions, exact native deletion targets `[1, 7]`, shared undo/redo, and six visible splats. Saving and reopening a `.licht` project preserves those exact deletion IDs.
+- The corrected viewer loads this fixture in the in-app browser, reaches Ready, and reports no console warnings or errors. This verifies the actual PLY parser retains the native IDs.
+- An optional legacy correction utility passed an isolated fixture test: one repair transaction preserves the existing history, can be undone/redone, and supports traversing all original entries. Live recovery was refused because additional non-VR history appeared; no correction was applied to that scene.
+- Installed and activated the new writer without re-registering the live plugin UI. Verification against the user's headset scene is pending.
+
+## Earlier checks
+
 - Installed plugin passes Lichtfeld's `plugin check`.
 - JavaScript syntax and controller math checks pass, including combined panning/rotation/scaling, rebased grab transitions, oriented box containment, sphere boundaries, degenerate grips, deadzones, and Quest button indices. The latest movement changes still need headset verification.
 - Center/Edge geometry checks pass: tangency, anisotropic Gaussian extents, rotated ellipsoids, box-corner rejection, and 2,000 seeded analytic sphere/box overlap comparisons. The new panel dropdown uses the installed Nightly's documented UI combo API; its live UI and headset behavior still need user verification.

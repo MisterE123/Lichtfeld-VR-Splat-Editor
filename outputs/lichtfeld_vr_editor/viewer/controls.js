@@ -41,3 +41,14 @@ export function buttons(source) {
     return {trigger:pressed(0),grip:pressed(1),lower:pressed(4),upper:pressed(5),
             x:deadzone(gp?.axes?.[2]||0),y:deadzone(gp?.axes?.[3]||0)};
 }
+export function nativeIndexMap(ids,count) {
+    if(!ids || ids.length!==count) throw new Error('Missing stable Lichtfeld splat IDs. Stop and relaunch the VR Editor.');
+    const inverse=new Uint32Array(count);inverse.fill(0xffffffff);
+    let identity=true;
+    for(let i=0;i<count;i++) {
+        const id=ids[i];
+        if(!Number.isInteger(id)||id<0||id>=count||inverse[id]!==0xffffffff) throw new Error('Invalid or duplicate Lichtfeld splat ID');
+        inverse[id]=i;identity&&=id===i;
+    }
+    return identity?null:inverse;
+}

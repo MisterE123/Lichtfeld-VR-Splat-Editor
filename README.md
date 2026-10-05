@@ -9,6 +9,9 @@ Run the geometry and controller checks with Node.js:
 ```sh
 node tests/test_controls.mjs
 node tests/test_overlap.mjs
+node tests/test_native_indices.mjs
 ```
+
+With Python and NumPy installed, `python tests/test_legacy_morton.py` checks the legacy renderer's row permutation against the actual bundled engine.
 
 Local investigation files, virtual environments, and scene recovery copies are excluded from Git. The extension is GPL-3.0-or-later; see its LICENSE and THIRD_PARTY.md.

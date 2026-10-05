@@ -1,6 +1,6 @@
 [project]
 name = "lichtfeld_vr_editor"
-version = "0.1.0"
+version = "0.1.1"
 description = "Quest / SteamVR scene editor with live Lichtfeld selection and history"
 dependencies = ["numpy>=1.26,<3"]
 

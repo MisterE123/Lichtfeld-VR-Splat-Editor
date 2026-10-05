@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {Vec3,Quat,Mat4,Entity,Color,loadGsplat} from './viewer.js';
-import {buttons,gripDelta,midpoint,grabPosition} from './controls.js';
+import {buttons,gripDelta,midpoint,grabPosition,nativeIndexMap} from './controls.js';
 import {overlapsEllipsoid} from './overlap.js';
 
 export function attachEditor(global,first,config,token) {
@@ -32,13 +32,13 @@ export function attachEditor(global,first,config,token) {
             const current=state.nodes[i], signature=JSON.stringify(current);
             if(n.signature===signature) return;
             n.signature=signature;
-            n.deleted.fill(0); for(const id of current.deleted) n.deleted[id]=1;
+            n.deleted.fill(0); for(const id of current.deleted) n.deleted[n.nativeToRender?.[id]??id]=1;
             const selected=new Set(current.selected);
             const opacity=n.data.getProp('opacity');
             const rgb=[0,1,2].map(j=>n.data.getProp(`f_dc_${j}`));
             for(let j=0;j<n.count;j++) {
                 opacity[j]=n.deleted[j]?-100:n.opacity[j];
-                for(let c=0;c<3;c++) rgb[c][j]=selected.has(j)?([-1,2,-1][c]):n.rgb[c][j];
+                for(let c=0;c<3;c++) rgb[c][j]=selected.has(n.nativeIds[j])?([-1,2,-1][c]):n.rgb[c][j];
             }
             n.resource.updateColorData(n.data);
         });
@@ -72,10 +72,12 @@ export function attachEditor(global,first,config,token) {
         entity.setLocalScale(m.getScale());
         const resource=entity.gsplat.instance.resource, data=resource.gsplatData;
         if(data.numSplats!==record.count) throw new Error('Export index count mismatch');
+        const nativeIds=data.getProp('lfs_index'),nativeToRender=nativeIndexMap(nativeIds,record.count);
         const scales=[0,1,2].map(i=>data.getProp(`scale_${i}`));
         const bounds=new Float32Array(record.count);
         for(let i=0;i<record.count;i++) bounds[i]=3*Math.exp(Math.max(scales[0][i],scales[1][i],scales[2][i]));
         nodes.push({entity,resource,data,count:record.count,offset:record.offset,
+                    nativeIds,nativeToRender,
                     scales,bounds,rotations:[1,2,3,0].map(i=>data.getProp(`rot_${i}`)),
                     xyz:['x','y','z'].map(p=>data.getProp(p)),opacity:data.getProp('opacity').slice(),
                     rgb:[0,1,2].map(i=>data.getProp(`f_dc_${i}`).slice()),deleted:new Uint8Array(record.count)});
@@ -223,7 +225,7 @@ export function attachEditor(global,first,config,token) {
                         hit=overlapsEllipsoid([p.x,p.y,p.z],axes,radius,shape);
                     }
                 }
-                if(hit) hits.push(n.offset+i);
+                if(hit) hits.push(n.offset+n.nativeIds[i]);
             }
         }
         return hits;
