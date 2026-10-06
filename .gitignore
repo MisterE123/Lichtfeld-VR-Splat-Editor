@@ -1,7 +1,6 @@
 # Local investigation, test runs, and scene recovery data.
 /work/
-/outputs/*.licht
-/outputs/*.ply
+/outputs/
 
 # Python environments and generated files.
 __pycache__/

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {gripDelta,grabPosition,inSelector,buttons,deadzone,rotationBetween} from '../outputs/lichtfeld_vr_editor/viewer/controls.js';
+import {gripDelta,grabPosition,inSelector,buttons,deadzone,rotationBetween} from '../viewer/controls.js';
 assert.equal(deadzone(.1),0);assert.equal(deadzone(1),1);
 assert.equal(gripDelta([0,0,0],[.01,0,0],[0,0,0],[1,0,0]),null);
 const scale=gripDelta([-.5,0,0],[.5,0,0],[-1,0,0],[1,0,0]);
@@ -29,3 +29,4 @@ assert.ok(inSelector([1.3,0,0],[0,0,0],1,'box',q));
 assert.ok(!inSelector([.9,.9,0],[0,0,0],1,'box',q));
 assert.ok(!inSelector([1.3,0,0],[0,0,0],1,'sphere',q));
 console.log('Controller checks passed: combined pan/scale/rotation, grab transitions, oriented box, sphere, degeneracy, deadzone, Quest mapping.');
+

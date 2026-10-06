@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {nativeIndexMap} from '../outputs/lichtfeld_vr_editor/viewer/controls.js';
+import {nativeIndexMap} from '../viewer/controls.js';
 
 // Exercise the actual bundled engine's Morton ordering and property reordering.
-const source=fs.readFileSync(new URL('../outputs/lichtfeld_vr_editor/viewer/viewer.js',import.meta.url),'utf8');
+const source=fs.readFileSync(new URL('../viewer/viewer.js',import.meta.url),'utf8');
 const start=source.indexOf('\t\tcalcMortonOrder() {');
 const end=source.indexOf('\t\tconstructor(elements, comments = [])',start);
 const methods=source.slice(start,end);
@@ -37,3 +37,4 @@ if(process.argv.includes('--fixture')) {
     const randomData=new Data();randomData.numSplats=257;randomData.getProp=name=>xyz[['x','y','z'].indexOf(name)];
     console.log(JSON.stringify({points:Array.from({length:257},(_,i)=>xyz.map(a=>a[i])),order:Array.from(randomData.calcMortonOrder())}));
 }
+

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {overlapsEllipsoid} from '../outputs/lichtfeld_vr_editor/viewer/overlap.js';
-import {rotateVector} from '../outputs/lichtfeld_vr_editor/viewer/controls.js';
+import {overlapsEllipsoid} from '../viewer/overlap.js';
+import {rotateVector} from '../viewer/controls.js';
 const axes=(x,y=x,z=x)=>[[x,0,0],[0,y,0],[0,0,z]];
 for(const shape of ['sphere','box']) {
     assert.ok(overlapsEllipsoid([1.15,0,0],axes(.2),1,shape));
@@ -27,3 +27,4 @@ for(let i=0;i<1000;i++) {
     }
 }
 console.log('Edge selection checks passed: tangency, anisotropy, orientation, box corners, and 2,000 analytic sphere/box comparisons.');
+

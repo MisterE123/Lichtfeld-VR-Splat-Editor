@@ -2,6 +2,12 @@
 
 Verified against the installed Lichtfeld Nightly v0.5.3-759-gf66c82a3 on October 5, 2026.
 
+## 0.1.2 GitHub installation layout (October 6, 2026)
+
+- Moved the manifest, entry point, panel template, and viewer assets to the Git repository root, as required by Lichtfeld's URL installer.
+- Updated all regression-test paths; controller, overlap, native-ID, and legacy-permutation tests pass.
+- A clean Git archive passes Lichtfeld's `plugin check` (`OK`) with the already installed dependency environment attached. Local investigation files and scenes are absent from the archive. A fresh URL installation still needs the installer's normal dependency setup.
+
 ## 0.1.1 deletion correction
 
 - Reproduced the root cause using the bundled engine's actual `calcMortonOrder` and `reorderData`: render row zero referred to native row one. Prior count-only tests did not catch this mismatch.
